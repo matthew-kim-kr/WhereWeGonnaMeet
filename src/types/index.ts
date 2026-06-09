@@ -11,6 +11,12 @@ export interface SearchResult {
   avgMinutes: number;
   individualMinutes: number[];
   personNames?: string[];
+  departures?: Station[];
+}
+
+export interface RoutePoint {
+  lat: number;
+  lng: number;
 }
 
 export interface Place {

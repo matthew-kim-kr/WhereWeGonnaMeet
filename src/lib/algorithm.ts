@@ -48,15 +48,29 @@ export async function findBestStations(
     }))
   );
 
+  console.log(`[algorithm] 후보역 수: ${candidates.length}, 출발역 수: ${departures.length}, 페어 수: ${pairs.length}`);
+  console.log(`[algorithm] 첫 번째 페어:`, JSON.stringify(pairs[0]));
+
   const res = await fetch("/api/travel-time", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ pairs }),
   });
 
-  if (!res.ok) throw new Error("travel-time API error");
+  console.log(`[algorithm] /api/travel-time 응답 status: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    console.error(`[algorithm] API 에러 body: ${body}`);
+    throw new Error("travel-time API error");
+  }
   const data = await res.json();
   const times: number[] = data.times;
+
+  const validCount = times.filter((t) => t < 9999).length;
+  console.log(`[algorithm] 받은 times 수: ${times.length}, 유효(< 9999): ${validCount}`);
+  if (validCount === 0 && times.length > 0) {
+    console.warn(`[algorithm] 첫 5개 time 값:`, times.slice(0, 5));
+  }
 
   const n = departures.length;
   const results: SearchResult[] = candidates.map((candidate, ci) => {
@@ -71,10 +85,12 @@ export async function findBestStations(
       avgMinutes,
       individualMinutes,
       personNames,
+      departures,
     };
   });
 
   const reachable = results.filter((r) => r.avgMinutes < 9999);
   reachable.sort((a, b) => a.avgMinutes - b.avgMinutes);
+  console.log(`[algorithm] 도달 가능 역 수: ${reachable.length}`);
   return reachable.slice(0, 3);
 }
