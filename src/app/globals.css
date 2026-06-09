@@ -1,1 +1,43 @@
 @import "tailwindcss";
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+    'Pretendard', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+}
+
+body {
+  background-color: #F8FAFC;
+  overscroll-behavior-y: none;
+}
+
+/* iOS safe area */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
+}
+
+/* 드래그 핸들 */
+.drag-handle {
+  width: 40px;
+  height: 4px;
+  background: #E5E7EB;
+  border-radius: 9999px;
+  margin: 0 auto 20px;
+}
+
+/* 스크롤바 숨김 */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 페이지 트랜지션 */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.3s ease both;
+}
