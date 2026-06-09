@@ -10,6 +10,7 @@ export interface SearchResult {
   station: Station;
   avgMinutes: number;
   individualMinutes: number[];
+  personNames?: string[];
 }
 
 export interface Place {

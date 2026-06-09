@@ -26,8 +26,10 @@ export default function ResultPage() {
         return;
       }
       const stations: Station[] = JSON.parse(raw);
+      const namesRaw = sessionStorage.getItem("personNames");
+      const personNames: string[] = namesRaw ? JSON.parse(namesRaw) : [];
       setDepartures(stations);
-      findBestStations(stations)
+      findBestStations(stations, personNames)
         .then(setResults)
         .catch(() => setError("경로를 계산하는 중 오류가 발생했습니다."))
         .finally(() => setLoading(false));
@@ -124,11 +126,14 @@ export default function ResultPage() {
                 </div>
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {result.individualMinutes.map((min, j) => (
-                    <span key={j} className="text-xs bg-gray-100 rounded-full px-3 py-1 text-gray-600">
-                      {j + 1}번: {min >= 9999 ? "경로 없음" : `${min}분`}
-                    </span>
-                  ))}
+                  {result.individualMinutes.map((min, j) => {
+                    const name = result.personNames?.[j] || `${j + 1}번`;
+                    return (
+                      <span key={j} className="text-xs bg-gray-100 rounded-full px-3 py-1 text-gray-600">
+                        {name}: {min >= 9999 ? "경로 없음" : `${min}분`}
+                      </span>
+                    );
+                  })}
                 </div>
 
                 <p className="text-xs text-blue-400 mt-3">탭하여 주변 장소 보기 →</p>
