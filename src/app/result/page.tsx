@@ -62,7 +62,9 @@ function ResultContent() {
     const stations = ids.map((id) => STATIONS.find((s) => s.id === id)).filter(Boolean) as Station[];
     if (stations.length === 0) return null;
     const nParam = searchParams.get("n");
-    const names = nParam ? nParam.split(",") : stations.map(() => "");
+    const rawNames = nParam ? nParam.split(",") : [];
+    // 역 수와 이름 수를 맞춤 (단축 URL 등으로 짧을 경우 빈 문자열로 패딩)
+    const names = stations.map((_, i) => rawNames[i] ?? "");
     return { stations, names };
   }
 
@@ -145,9 +147,14 @@ function ResultContent() {
         setTimeout(() => setShareState("idle"), 2000);
       } catch { /* 사용자가 취소 */ }
     } else {
-      await navigator.clipboard.writeText(url);
-      setShareState("copied");
-      setTimeout(() => setShareState("idle"), 2000);
+      try {
+        await navigator.clipboard.writeText(url);
+        setShareState("copied");
+        setTimeout(() => setShareState("idle"), 2000);
+      } catch {
+        // clipboard API 미지원 환경 — 수동 복사 안내
+        prompt("아래 링크를 복사해주세요", url);
+      }
     }
   }
 
