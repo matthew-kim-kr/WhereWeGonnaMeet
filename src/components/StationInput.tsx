@@ -112,7 +112,7 @@ export default function StationInput({
 
       {/* 드롭다운 */}
       {open && (
-        <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-2xl shadow-xl mt-2 overflow-hidden">
+        <div className="absolute z-[100] w-full bg-white border border-gray-200 rounded-2xl shadow-2xl mt-2 overflow-hidden">
           {results.length > 0 ? (
             <ul className="max-h-56 overflow-y-auto scrollbar-hide py-1">
               {results.map((station, i) => (

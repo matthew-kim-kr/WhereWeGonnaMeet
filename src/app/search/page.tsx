@@ -89,7 +89,7 @@ export default function SearchPage() {
           return (
             <div
               key={i}
-              className="bg-white rounded-2xl overflow-hidden border transition-shadow"
+              className="bg-white rounded-2xl border transition-shadow"
               style={{
                 borderColor: isDone ? palette.border : "#E5E7EB",
                 boxShadow: isDone ? `0 0 0 1px ${palette.border}` : undefined,
